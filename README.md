@@ -31,6 +31,3 @@ Zero build, zero dependências pesadas — funciona abrindo o arquivo direto no 
 1. Clone ou faça download do repositório
 2. Abra o arquivo `index.html` no navegador  
    Pronto! Já está funcionando.
-git clone https://github.com/seu-usuario/todo-list.git
-cd todo-list
-# abra index.html no navegador
