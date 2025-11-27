@@ -1,6 +1,7 @@
 # Lista de Tarefas Simples
 
-![Preview da aplicação](https://i.imgur.com/2FJkE5m.png)
+![Preview da aplicação]
+<img width="1355" height="645" alt="image" src="https://github.com/user-attachments/assets/77223871-6cc0-457e-aa85-0e49e546a905" />
 
 Uma To-Do List **moderna, acessível e 100% funcional** feita apenas com HTML, Tailwind CSS e jQuery.  
 Zero build, zero dependências pesadas — funciona abrindo o arquivo direto no navegador!
