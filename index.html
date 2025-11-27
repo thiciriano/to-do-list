@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lista de Tarefas</title>
+    
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+      $(document).ready(function () {
+        const $taskList = $("#taskList");
+        const $taskInput = $("#taskInput");
+
+        // Previne envio do formulário com Enter
+        $("#addTaskForm").on("submit", function (e) {
+          e.preventDefault();
+          $("#addTaskButton").click();
+        });
+
+        // Adicionar nova tarefa
+        $("#addTaskButton").on("click", function () {
+          const taskText = $taskInput.val().trim();
+
+          if (!taskText) return;
+
+          // Remove mensagem inicial
+          $taskList
+            .find("li")
+            .filter(function () {
+              return $(this).text().includes("Comece adicionando uma tarefa");
+            })
+            .remove();
+
+          const taskId = `task-${Date.now()}`;
+
+          const taskItem = $("<li></li>")
+            .addClass(
+              "p-3 border border-gray-300 rounded-lg flex items-center justify-between group hover:bg-gray-50 transition duration-200"
+            )
+            .attr("role", "listitem")
+            .attr("aria-checked", "false");
+
+          // Checkbox
+          const checkbox = $("<input>", {
+            type: "checkbox",
+            id: taskId,
+          }).addClass(
+            "peer h-5 w-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-2 focus:ring-blue-500 cursor-pointer"
+          );
+
+          // Label clicável (acessibilidade!)
+          const label = $("<label>", {
+            for: taskId,
+            text: taskText,
+          }).addClass(
+            "ml-3 flex-1 text-gray-800 cursor-pointer select-none group-hover:text-gray-600 peer-focus:text-gray-700"
+          );
+
+          // Botão Delete
+          const deleteBtn = $("<button>", {
+            type: "button",
+            text: "Delete",
+            "aria-label": `Excluir tarefa: ${taskText}`,
+          }).addClass(
+            "ml-4 px-3 py-1 text-sm font-medium text-white bg-red-500 rounded-md opacity-80 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 transition"
+          );
+
+          // Checkbox marca/desmarca com linha
+          checkbox.on("change", function () {
+            const isChecked = this.checked;
+            label.toggleClass("line-through text-gray-500", isChecked);
+            taskItem.attr("aria-checked", isChecked);
+          });
+
+          // Montagem
+          taskItem.append(
+            $("<div>")
+              .addClass("flex items-center flex-1")
+              .append(checkbox, label),
+            deleteBtn
+          );
+
+          $taskList.append(taskItem);
+
+          // Limpa e foca
+          $taskInput.val("").focus();
+        });
+
+        // Delegação do evento de exclusão (funciona sempre!)
+        $taskList.on("click", "button", function () {
+          const taskToRemove = $(this).closest("li");
+
+          taskToRemove.slideUp(300, function () {
+            $(this).remove();
+
+            // Se a lista ficar vazia, mostra a mensagem inicial novamente
+            if ($taskList.children().length === 0) {
+              $taskList.append(
+                `<li class="text-center text-gray-500 p-6 border-2 border-dashed border-gray-300 rounded-lg" role="listitem">
+                  Comece adicionando uma tarefa!
+                </li>`
+              );
+            }
+          });
+        });
+      });
+    </script>
+  </head>
+
+  <body
+    class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4"
+  >
+    <main class="bg-white shadow-2xl rounded-2xl w-full max-w-lg p-8">
+      <h1 class="text-4xl font-extrabold text-center text-gray-800 mb-8">
+        Lista de Tarefas
+      </h1>
+
+      <form id="addTaskForm" class="flex mb-8 gap-0">
+        <input
+          id="taskInput"
+          type="text"
+          placeholder="Ex: Comprar pão e leite"
+          aria-label="Nova tarefa"
+          required
+          class="flex-1 px-4 py-3 text-lg border border-gray-300 rounded-l-xl focus:outline-none focus:ring-4 focus:ring-blue-300 transition"
+        />
+        <button
+          id="addTaskButton"
+          type="button"
+          class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-r-xl hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition"
+        >
+          Adicionar
+        </button>
+      </form>
+
+      <ul id="taskList" role="list" class="space-y-3">
+        <li
+          class="text-center text-gray-500 p-6 border-2 border-dashed border-gray-300 rounded-lg"
+          role="listitem"
+        >
+          Comece adicionando uma tarefa!
+        </li>
+      </ul>
+    </main>
+  </body>
+</html>
